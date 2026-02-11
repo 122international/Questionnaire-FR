@@ -553,13 +553,8 @@
             font-weight: bold;
             color: #4a90e2;
         }
-        
-        /* CLASSE POUR MASQUER LA SECTION MÉNOPAUSE */
-        .hidden-section {
-            display: none;
-        }
 
-        /* STYLES POUR L'IMPRESSION PDF - MODIFIÉS POUR MOBILE */
+        /* STYLES POUR L'IMPRESSION PDF - CORRIGÉS */
         @media print {
             body {
                 padding: 8px;
@@ -568,16 +563,17 @@
             .header {
                 background: #2c3e50 !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .section {
                 border: 1px solid #ccc;
                 box-shadow: none;
             }
+            .compact-option input {
+                -webkit-print-color-adjust: exact;
+            }
             .results-section {
                 background-color: white !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .download-section {
                 display: none;
@@ -585,22 +581,18 @@
             .improvement-analysis {
                 background-color: #f0f8ff !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .highlight {
                 background-color: #fffacd !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .notes-section {
                 background-color: #f9f9f9 !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .score-bar-fill {
                 background: #2c3e50 !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             .mobile-question {
                 display: none !important;
@@ -611,19 +603,13 @@
             .other-input-fullwidth {
                 background-color: #f8f9fa !important;
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             body::before {
                 opacity: 0.03;
                 background-size: 50%;
             }
             
-            /* Masquer la section ménopause à l'impression si elle est cachée */
-            .hidden-section {
-                display: none !important;
-            }
-            
-            /* Masquer les placeholders */
+            /* CORRECTION : MASQUER LES PLACEHOLDERS À L'IMPRESSION */
             textarea::placeholder,
             input::placeholder {
                 color: transparent !important;
@@ -637,44 +623,72 @@
                 background-color: white !important;
             }
             
-            /* --- CORRECTION MAJEURE MOBILE : FORCE L'AFFICHAGE NATIF DES INPUTS --- */
-            /* On réinitialise complètement le style pour TOUS les inputs pour garantir la visibilité sur mobile */
-            input[type="radio"],
-            input[type="checkbox"],
+            /* CORRECTION CRITIQUE : AFFICHAGE DES RÉPONSES COCHÉES EN IMPRESSION (Utilisation de ✓) */
+            
+            /* Styles de base pour rendre les radios/checkboxes visibles lors de l'impression */
             .compact-option input[type="radio"],
             .mobile-option input[type="radio"],
             .radio-option-horizontal input[type="radio"],
             .checkbox-option input[type="checkbox"] {
-                -webkit-appearance: radio !important;
-                -moz-appearance: radio !important;
-                appearance: radio !important;
-                display: inline-block !important;
-                border: none !important; /* Laisse le navigateur gérer la bordure */
-                background: none !important;
-                box-shadow: none !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                width: 14px !important;
-                height: 14px !important;
-                margin: 0 4px 0 0 !important;
-                position: static !important; /* Évite les problèmes de positionnement */
+                -webkit-appearance: none;
+                appearance: none;
+                width: 14px;
+                height: 14px;
+                border: 1px solid #999;
+                border-radius: 2px;
+                display: inline-block;
+                position: relative;
+                background: white;
+                margin: 0;
             }
 
-            input[type="checkbox"] {
-                -webkit-appearance: checkbox !important;
-                -moz-appearance: checkbox !important;
-                appearance: checkbox !important;
+            /* Augmenter la taille pour la version mobile */
+            .mobile-option input[type="radio"] {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* Style des éléments COCHÉS avec le checkmark (✓) */
+            .compact-option input[type="radio"]:checked,
+            .mobile-option input[type="radio"]:checked,
+            .radio-option-horizontal input[type="radio"]:checked,
+            .checkbox-option input[type="checkbox"]:checked {
+                background-color: #f0f0f0; /* Léger fond gris pour indiquer le coche */
+                border-color: #2c3e50;
             }
             
-            /* On DÉTRUIT les styles personnalisés (les ronds CSS) qui ne s'affichent pas sur mobile */
-            .compact-option input[type="radio"]::after,
-            .mobile-option input[type="radio"]::after,
-            .radio-option-horizontal input[type="radio"]::after,
-            .checkbox-option input[type="checkbox"]::after,
-            input[type="radio"]::before,
-            input[type="radio"]::after {
-                content: none !important;
-                display: none !important;
+            .compact-option input[type="radio"]:checked::after,
+            .radio-option-horizontal input[type="radio"]:checked::after,
+            .checkbox-option input[type="checkbox"]:checked::after {
+                content: "✓"; /* Correction: utilisation du checkmark */
+                display: block;
+                text-align: center;
+                font-weight: bold;
+                color: #2c3e50;
+                font-size: 16px; /* Taille augmentée pour le checkmark */
+                line-height: 12px; /* Ajustement de la hauteur de ligne */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
+            }
+            
+            .mobile-option input[type="radio"]:checked::after {
+                content: "✓"; /* Correction: utilisation du checkmark */
+                display: block;
+                text-align: center;
+                font-weight: bold;
+                color: #2c3e50;
+                font-size: 20px; /* Taille augmentée pour la version mobile */
+                line-height: 16px; /* Ajustement de la hauteur de ligne */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
             }
             
             /* S'assurer que tout est visible */
@@ -684,42 +698,6 @@
             
             .compact-question {
                 border-bottom: 1px solid #eee !important;
-            }
-
-            /* Correctifs alignement questions 23+ */
-            .radio-group-horizontal,
-            .checkbox-grid {
-                display: flex !important;
-                flex-direction: row !important;
-                flex-wrap: wrap !important;
-                gap: 15px !important;
-                width: 100% !important;
-            }
-
-            .radio-option-horizontal,
-            .checkbox-option {
-                display: inline-flex !important;
-                align-items: center !important;
-                margin-right: 15px !important;
-                margin-bottom: 5px !important;
-                white-space: nowrap !important;
-                width: auto !important;
-                break-inside: avoid !important;
-            }
-
-            .radio-option-horizontal label,
-            .checkbox-option label {
-                display: inline-block !important;
-                margin-left: 4px !important;
-                margin-bottom: 0 !important;
-                vertical-align: middle !important;
-            }
-
-            .other-option-container {
-                display: flex !important;
-                align-items: center !important;
-                flex-wrap: wrap !important;
-                width: 100% !important;
             }
         }
 
@@ -971,19 +949,6 @@
                 <input type="number" id="age" name="age" min="1" max="120" required>
             </div>
             <div class="form-group">
-                <label>Sexe :</label>
-                <div class="radio-group-horizontal">
-                    <div class="radio-option-horizontal">
-                        <input type="radio" id="sex-f" name="sex" value="F">
-                        <label for="sex-f">Femme</label>
-                    </div>
-                    <div class="radio-option-horizontal">
-                        <input type="radio" id="sex-h" name="sex" value="H">
-                        <label for="sex-h">Homme</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="phone">Téléphone WhatsApp :</label>
                 <input type="tel" id="phone" name="phone">
             </div>
@@ -1056,23 +1021,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q1" value="5">
+                    <input type="radio" name="q1_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q1" value="4">
+                    <input type="radio" name="q1_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q1" value="3">
+                    <input type="radio" name="q1_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q1" value="2">
+                    <input type="radio" name="q1_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q1" value="1">
+                    <input type="radio" name="q1_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1085,23 +1050,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q2" value="5">
+                    <input type="radio" name="q2_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q2" value="4">
+                    <input type="radio" name="q2_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q2" value="3">
+                    <input type="radio" name="q2_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q2" value="2">
+                    <input type="radio" name="q2_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q2" value="1">
+                    <input type="radio" name="q2_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1114,23 +1079,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q3" value="5">
+                    <input type="radio" name="q3_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q3" value="4">
+                    <input type="radio" name="q3_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q3" value="3">
+                    <input type="radio" name="q3_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q3" value="2">
+                    <input type="radio" name="q3_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q3" value="1">
+                    <input type="radio" name="q3_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1143,23 +1108,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q4" value="5">
+                    <input type="radio" name="q4_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q4" value="4">
+                    <input type="radio" name="q4_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q4" value="3">
+                    <input type="radio" name="q4_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q4" value="2">
+                    <input type="radio" name="q4_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q4" value="1">
+                    <input type="radio" name="q4_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1213,23 +1178,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q5" value="5">
+                    <input type="radio" name="q5_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q5" value="4">
+                    <input type="radio" name="q5_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q5" value="3">
+                    <input type="radio" name="q5_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q5" value="2">
+                    <input type="radio" name="q5_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q5" value="1">
+                    <input type="radio" name="q5_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1242,23 +1207,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q6" value="5">
+                    <input type="radio" name="q6_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q6" value="4">
+                    <input type="radio" name="q6_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q6" value="3">
+                    <input type="radio" name="q6_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q6" value="2">
+                    <input type="radio" name="q6_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q6" value="1">
+                    <input type="radio" name="q6_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1271,23 +1236,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q7" value="5">
+                    <input type="radio" name="q7_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q7" value="4">
+                    <input type="radio" name="q7_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q7" value="3">
+                    <input type="radio" name="q7_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q7" value="2">
+                    <input type="radio" name="q7_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q7" value="1">
+                    <input type="radio" name="q7_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1331,23 +1296,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q8" value="5">
+                    <input type="radio" name="q8_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q8" value="4">
+                    <input type="radio" name="q8_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q8" value="3">
+                    <input type="radio" name="q8_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q8" value="2">
+                    <input type="radio" name="q8_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q8" value="1">
+                    <input type="radio" name="q8_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1360,23 +1325,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q9" value="5">
+                    <input type="radio" name="q9_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q9" value="4">
+                    <input type="radio" name="q9_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q9" value="3">
+                    <input type="radio" name="q9_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q9" value="2">
+                    <input type="radio" name="q9_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q9" value="1">
+                    <input type="radio" name="q9_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1430,23 +1395,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q10" value="5">
+                    <input type="radio" name="q10_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q10" value="4">
+                    <input type="radio" name="q10_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q10" value="3">
+                    <input type="radio" name="q10_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q10" value="2">
+                    <input type="radio" name="q10_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q10" value="1">
+                    <input type="radio" name="q10_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1459,23 +1424,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q11" value="5">
+                    <input type="radio" name="q11_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q11" value="4">
+                    <input type="radio" name="q11_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q11" value="3">
+                    <input type="radio" name="q11_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q11" value="2">
+                    <input type="radio" name="q11_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q11" value="1">
+                    <input type="radio" name="q11_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1488,23 +1453,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q12" value="5">
+                    <input type="radio" name="q12_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q12" value="4">
+                    <input type="radio" name="q12_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q12" value="3">
+                    <input type="radio" name="q12_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q12" value="2">
+                    <input type="radio" name="q12_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q12" value="1">
+                    <input type="radio" name="q12_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1558,23 +1523,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q13" value="5">
+                    <input type="radio" name="q13_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q13" value="4">
+                    <input type="radio" name="q13_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q13" value="3">
+                    <input type="radio" name="q13_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q13" value="2">
+                    <input type="radio" name="q13_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q13" value="1">
+                    <input type="radio" name="q13_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1587,23 +1552,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q14" value="5">
+                    <input type="radio" name="q14_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q14" value="4">
+                    <input type="radio" name="q14_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q14" value="3">
+                    <input type="radio" name="q14_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q14" value="2">
+                    <input type="radio" name="q14_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q14" value="1">
+                    <input type="radio" name="q14_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1616,23 +1581,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q15" value="5">
+                    <input type="radio" name="q15_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q15" value="4">
+                    <input type="radio" name="q15_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q15" value="3">
+                    <input type="radio" name="q15_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q15" value="2">
+                    <input type="radio" name="q15_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q15" value="1">
+                    <input type="radio" name="q15_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1686,23 +1651,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q16" value="5">
+                    <input type="radio" name="q16_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q16" value="4">
+                    <input type="radio" name="q16_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q16" value="3">
+                    <input type="radio" name="q16_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q16" value="2">
+                    <input type="radio" name="q16_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q16" value="1">
+                    <input type="radio" name="q16_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1715,23 +1680,23 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q17" value="5">
+                    <input type="radio" name="q17_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q17" value="4">
+                    <input type="radio" name="q17_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q17" value="3">
+                    <input type="radio" name="q17_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q17" value="2">
+                    <input type="radio" name="q17_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q17" value="1">
+                    <input type="radio" name="q17_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
                 </div>
             </div>
@@ -1744,193 +1709,24 @@
             </div>
             <div class="mobile-options-grid">
                 <div class="mobile-option">
-                    <input type="radio" name="q18" value="5">
+                    <input type="radio" name="q18_mobile" value="5">
                     <div class="mobile-option-label">Jamais</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q18" value="4">
+                    <input type="radio" name="q18_mobile" value="4">
                     <div class="mobile-option-label">Rarement</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q18" value="3">
+                    <input type="radio" name="q18_mobile" value="3">
                     <div class="mobile-option-label">Parfois</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q18" value="2">
+                    <input type="radio" name="q18_mobile" value="2">
                     <div class="mobile-option-label">Souvent</div>
                 </div>
                 <div class="mobile-option">
-                    <input type="radio" name="q18" value="1">
+                    <input type="radio" name="q18_mobile" value="1">
                     <div class="mobile-option-label">Toujours</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="menopause-section" class="hidden-section">
-            <div class="category-title">G. Soutien pendant la pré/post-ménopause</div>
-            
-            <div class="compact-grid">
-                <div class="compact-header">Question</div>
-                <div class="compact-header">Jamais</div>
-                <div class="compact-header">Rarement</div>
-                <div class="compact-header">Parfois</div>
-                <div class="compact-header">Souvent</div>
-                <div class="compact-header">Toujours</div>
-                
-                <div class="compact-question">
-                    <span class="question-number">19</span>
-                    À quelle fréquence vos nuits sont-elles perturbées par des réveils soudains ou des sueurs nocturnes ?
-                </div>
-                <div class="compact-option"><input type="radio" name="q19" value="5"></div>
-                <div class="compact-option"><input type="radio" name="q19" value="4"></div>
-                <div class="compact-option"><input type="radio" name="q19" value="3"></div>
-                <div class="compact-option"><input type="radio" name="q19" value="2"></div>
-                <div class="compact-option"><input type="radio" name="q19" value="1"></div>
-                
-                <div class="compact-question">
-                    <span class="question-number">20</span>
-                    À quelle fréquence êtes-vous gênée par des bouffées de chaleur soudaines en public ?
-                </div>
-                <div class="compact-option"><input type="radio" name="q20" value="5"></div>
-                <div class="compact-option"><input type="radio" name="q20" value="4"></div>
-                <div class="compact-option"><input type="radio" name="q20" value="3"></div>
-                <div class="compact-option"><input type="radio" name="q20" value="2"></div>
-                <div class="compact-option"><input type="radio" name="q20" value="1"></div>
-                
-                <div class="compact-question">
-                    <span class="question-number">21</span>
-                    Les changements récents de votre silhouette ou de votre poids affectent-ils votre confiance en vous ?
-                </div>
-                <div class="compact-option"><input type="radio" name="q21" value="5"></div>
-                <div class="compact-option"><input type="radio" name="q21" value="4"></div>
-                <div class="compact-option"><input type="radio" name="q21" value="3"></div>
-                <div class="compact-option"><input type="radio" name="q21" value="2"></div>
-                <div class="compact-option"><input type="radio" name="q21" value="1"></div>
-                
-                <div class="compact-question">
-                    <span class="question-number">22</span>
-                    Dans quelle mesure la baisse de désir ou l'inconfort intime affectent-ils votre épanouissement personnel ou votre vie de couple ?
-                </div>
-                <div class="compact-option"><input type="radio" name="q22" value="5"></div>
-                <div class="compact-option"><input type="radio" name="q22" value="4"></div>
-                <div class="compact-option"><input type="radio" name="q22" value="3"></div>
-                <div class="compact-option"><input type="radio" name="q22" value="2"></div>
-                <div class="compact-option"><input type="radio" name="q22" value="1"></div>
-            </div>
-            
-            <div class="mobile-question">
-                <div class="mobile-question-text">
-                    <span class="question-number">19</span>
-                    À quelle fréquence vos nuits sont-elles perturbées par des réveils soudains ou des sueurs nocturnes ?
-                </div>
-                <div class="mobile-options-grid">
-                    <div class="mobile-option">
-                        <input type="radio" name="q19" value="5">
-                        <div class="mobile-option-label">Jamais</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q19" value="4">
-                        <div class="mobile-option-label">Rarement</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q19" value="3">
-                        <div class="mobile-option-label">Parfois</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q19" value="2">
-                        <div class="mobile-option-label">Souvent</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q19" value="1">
-                        <div class="mobile-option-label">Toujours</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mobile-question">
-                <div class="mobile-question-text">
-                    <span class="question-number">20</span>
-                    À quelle fréquence êtes-vous gênée par des bouffées de chaleur soudaines en public ?
-                </div>
-                <div class="mobile-options-grid">
-                    <div class="mobile-option">
-                        <input type="radio" name="q20" value="5">
-                        <div class="mobile-option-label">Jamais</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q20" value="4">
-                        <div class="mobile-option-label">Rarement</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q20" value="3">
-                        <div class="mobile-option-label">Parfois</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q20" value="2">
-                        <div class="mobile-option-label">Souvent</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q20" value="1">
-                        <div class="mobile-option-label">Toujours</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mobile-question">
-                <div class="mobile-question-text">
-                    <span class="question-number">21</span>
-                    Les changements récents de votre silhouette ou de votre poids affectent-ils votre confiance en vous ?
-                </div>
-                <div class="mobile-options-grid">
-                    <div class="mobile-option">
-                        <input type="radio" name="q21" value="5">
-                        <div class="mobile-option-label">Jamais</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q21" value="4">
-                        <div class="mobile-option-label">Rarement</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q21" value="3">
-                        <div class="mobile-option-label">Parfois</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q21" value="2">
-                        <div class="mobile-option-label">Souvent</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q21" value="1">
-                        <div class="mobile-option-label">Toujours</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mobile-question">
-                <div class="mobile-question-text">
-                    <span class="question-number">22</span>
-                    Dans quelle mesure la baisse de désir ou l'inconfort intime affectent-ils votre épanouissement personnel ou votre vie de couple ?
-                </div>
-                <div class="mobile-options-grid">
-                    <div class="mobile-option">
-                        <input type="radio" name="q22" value="5">
-                        <div class="mobile-option-label">Jamais</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q22" value="4">
-                        <div class="mobile-option-label">Rarement</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q22" value="3">
-                        <div class="mobile-option-label">Parfois</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q22" value="2">
-                        <div class="mobile-option-label">Souvent</div>
-                    </div>
-                    <div class="mobile-option">
-                        <input type="radio" name="q22" value="1">
-                        <div class="mobile-option-label">Toujours</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1938,7 +1734,7 @@
         <h2 class="section-title">Vos Habitudes de Consommation</h2>
         
         <div class="form-group-compact">
-            <label>23. Quelle importance accordez-vous à votre forme et bien-être ?</label>
+            <label>19. Quelle importance accordez-vous à votre forme et bien-être ?</label>
             <div class="radio-group-horizontal">
                 <div class="radio-option-horizontal">
                     <input type="radio" id="importance-1" name="importance" value="very">
@@ -1956,7 +1752,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>24. Comment savez-vous que votre corps reçoit tous les nutriments dont il a besoin ?</label>
+            <label>20. Comment savez-vous que votre corps reçoit tous les nutriments dont il a besoin ?</label>
             <div class="radio-group-horizontal">
                 <div class="radio-option-horizontal">
                     <input type="radio" id="nutrients-1" name="nutrients" value="dont-know">
@@ -1977,7 +1773,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>25. Utilisez-vous des compléments nutritionnels ?</label>
+            <label>21. Utilisez-vous des compléments nutritionnels ?</label>
             <div class="radio-group-horizontal">
                 <div class="radio-option-horizontal">
                     <input type="radio" id="supplements-1" name="supplements" value="yes">
@@ -1995,7 +1791,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>26. Si OUI, pour quelles raisons ? (plusieurs réponses possibles)</label>
+            <label>22. Si OUI, pour quelles raisons ? (plusieurs réponses possibles)</label>
             <div class="checkbox-grid">
                 <div class="checkbox-option">
                     <input type="checkbox" id="reason-1" name="reasons" value="energy">
@@ -2036,7 +1832,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>27. Quels types de produits utilisez-vous ?</label>
+            <label>23. Quels types de produits utilisez-vous ?</label>
             <div class="checkbox-grid">
                 <div class="checkbox-option">
                     <input type="checkbox" id="product-1" name="products" value="multivitamins">
@@ -2065,7 +1861,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>28. Où achetez-vous vos produits ?</label>
+            <label>24. Où achetez-vous vos produits ?</label>
             <div class="checkbox-grid">
                 <div class="checkbox-option">
                     <input type="checkbox" id="place-1" name="places" value="pharmacy">
@@ -2094,7 +1890,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>29. Budget mensuel pour votre FOYER - Compléments nutritionnels :</label>
+            <label>25. Budget mensuel pour votre FOYER - Compléments nutritionnels :</label>
             <div class="radio-group-horizontal">
                 <div class="radio-option-horizontal">
                     <input type="radio" id="budget-supplements-1" name="budget-supplements" value="less50">
@@ -2116,7 +1912,7 @@
         </div>
         
         <div class="form-group-compact">
-            <label>30. Budget mensuel pour votre FOYER - Soins de la peau :</label>
+            <label>26. Budget mensuel pour votre FOYER - Soins de la peau :</label>
             <div class="radio-group-horizontal">
                 <div class="radio-option-horizontal">
                     <input type="radio" id="budget-skin-1" name="budget-skin" value="less50">
@@ -2138,7 +1934,7 @@
         </div>
 
         <div class="form-group-compact">
-            <label for="obstacles">31. Qu'est-ce qui vous empêche de prendre soin de votre forme et bien-être ?</label>
+            <label for="obstacles">27. Qu'est-ce qui vous empêche de prendre soin de votre forme et bien-être ?</label>
             <textarea id="obstacles" name="obstacles" placeholder="Manque de temps, budget, connaissances..."></textarea>
         </div>
         
@@ -2218,9 +2014,7 @@
             { id: 'C', name: 'Système digestif', questions: ['q8', 'q9'], maxScore: 10 },
             { id: 'D', name: 'Immunitaire', questions: ['q10', 'q11', 'q12'], maxScore: 15 },
             { id: 'E', name: 'Beauté intégrale', questions: ['q13', 'q14', 'q15'], maxScore: 15 },
-            { id: 'F', name: 'Santé osseuse', questions: ['q16', 'q17', 'q18'], maxScore: 15 },
-            // Nouvelle catégorie G conditionnelle
-            { id: 'G', name: 'Pré/Post-ménopause', questions: ['q19', 'q20', 'q21', 'q22'], maxScore: 20, isConditional: true }
+            { id: 'F', name: 'Santé osseuse', questions: ['q16', 'q17', 'q18'], maxScore: 15 }
         ];
 
         // Fonction pour déterminer le niveau
@@ -2271,17 +2065,14 @@
                 input.classList.remove('visible');
                 input.value = '';
             });
-
-            // Cacher la section ménopause par défaut
-            const menopauseSection = document.getElementById('menopause-section');
-            if (menopauseSection) menopauseSection.classList.add('hidden-section');
             
             // Réinitialiser les scores
             updateScores();
         }
 
-        // Gestion des champs "Autre"
+        // Gestion des champs "Autre" (conservée pour la fonctionnalité)
         function setupOtherInputs() {
+            // Radio buttons avec option "Autre"
             document.querySelectorAll('input[type="radio"][value="other"]').forEach(radio => {
                 radio.addEventListener('change', function() {
                     const container = this.closest('.other-option-container');
@@ -2298,6 +2089,7 @@
                 });
             });
 
+            // Checkboxes avec option "Autre"
             document.querySelectorAll('input[type="checkbox"][value="other"]').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const container = this.closest('.other-option-container');
@@ -2314,70 +2106,76 @@
                 });
             });
         }
-
-        // LOGIQUE DE VISIBILITÉ DE LA SECTION MENOPAUSE
-        function updateMenopauseSectionVisibility() {
-            const ageInput = document.getElementById('age');
-            const sexInput = document.querySelector('input[name="sex"]:checked');
-            const section = document.getElementById('menopause-section');
-            
-            const age = parseInt(ageInput.value) || 0;
-            const sex = sexInput ? sexInput.value : '';
-            
-            // MODIFICATION : Condition d'âge >= 35
-            if (sex === 'F' && age >= 35) {
-                section.classList.remove('hidden-section');
-            } else {
-                section.classList.add('hidden-section');
-                // Réinitialiser les réponses de cette section si on la cache
-                document.querySelectorAll('#menopause-section input[type="radio"]').forEach(input => {
-                    input.checked = false;
+        
+        // CORRECTION BUG MOBILE : Synchronisation Mobile <-> Desktop
+        // Gère les noms différents (q1 vs q1_mobile) pour éviter le conflit de nom
+        function setupRadioSync() {
+            // 1. Écouter les changements sur les radios MOBILE
+            document.querySelectorAll('.mobile-option input[type="radio"]').forEach(mobileRadio => {
+                mobileRadio.addEventListener('change', function() {
+                    if (this.checked) {
+                        // On enlève '_mobile' pour trouver le nom desktop équivalent (ex: q1_mobile -> q1)
+                        const desktopName = this.name.replace('_mobile', '');
+                        const targetVal = this.value;
+                        
+                        // On cherche le radio desktop correspondant
+                        const desktopRadio = document.querySelector(`.compact-option input[name="${desktopName}"][value="${targetVal}"]`);
+                        
+                        // On le coche (sans déclencher de conflit car les noms sont maintenant différents)
+                        if (desktopRadio) {
+                            desktopRadio.checked = true;
+                            // On force le recalcul des scores car le desktopRadio est celui utilisé par updateScores
+                            updateScores(); 
+                        }
+                    }
                 });
-            }
-            updateScores(); // Recalculer les scores
+            });
+            
+            // Pour les utilisateurs qui sont sur Desktop mais utilisent quand même les radios de la grille compacte
+            document.querySelectorAll('.compact-option input[type="radio"]').forEach(desktopRadio => {
+                desktopRadio.addEventListener('change', function() {
+                    if (this.checked) {
+                        updateScores();
+                    }
+                });
+            });
         }
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            // Nettoyer toutes les données au chargement
             clearAllData();
+            
+            // Configurer les champs "autre"
             setupOtherInputs();
             
-            // Écouteurs pour la mise à jour des scores
-            const allInputs = document.querySelectorAll('input, textarea');
+            // Lancer la synchronisation des radios (CORRECTION APPLIQUÉE)
+            setupRadioSync();
+            
+            // Mise à jour des scores sur changement (pour les checkboxes et autres inputs)
+            const allInputs = document.querySelectorAll('input[type="checkbox"], textarea, input[type="text"], input[type="number"]');
             allInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    updateScores();
-                });
-            });
-
-            // Écouteurs spécifiques pour la conditionnalité
-            document.getElementById('age').addEventListener('input', updateMenopauseSectionVisibility);
-            document.querySelectorAll('input[name="sex"]').forEach(input => {
-                input.addEventListener('change', updateMenopauseSectionVisibility);
+                // On ajoute un écouteur sur les autres inputs qui ne sont pas des radios de questions
+                if (!input.name.startsWith('q') && !input.name.endsWith('_mobile')) {
+                    input.addEventListener('change', function() {
+                        updateScores();
+                    });
+                }
             });
             
+            // Initialiser les scores
             updateScores();
         });
 
         function updateScores() {
             let totalScore = 0;
-            let currentTotalMaxScore = 0; // Max score dynamique selon visibilité
             const categoryScores = [];
             
-            // Vérifier si la section G est visible
-            const isMenopauseVisible = !document.getElementById('menopause-section').classList.contains('hidden-section');
-
             categories.forEach(category => {
-                // Si la catégorie est conditionnelle et que la section est cachée, on l'ignore
-                if (category.isConditional && !isMenopauseVisible) {
-                    return; 
-                }
-
+                // Cette fonction utilise les noms de question standard ('q1', 'q2' etc.)
                 const score = calculateCategoryScore(category.questions);
                 const percentage = Math.round((score / category.maxScore) * 100);
                 totalScore += score;
-                currentTotalMaxScore += category.maxScore;
-
                 categoryScores.push({
                     id: category.id,
                     name: category.name,
@@ -2387,16 +2185,13 @@
                 });
             });
             
-            // Tri par pourcentage CROISSANT
+            // Tri par pourcentage CROISSANT (plus bas en premier pour l'affichage)
             categoryScores.sort((a, b) => a.percentage - b.percentage);
             
-            // Calcul du pourcentage total
-            // Éviter la division par zéro
-            const totalPercentage = currentTotalMaxScore > 0 
-                ? Math.round((totalScore / currentTotalMaxScore) * 100) 
-                : 0;
+            const totalMaxScore = 90;
+            const totalPercentage = Math.round((totalScore / totalMaxScore) * 100);
             
-            updateScoreDisplay(categoryScores, totalPercentage, currentTotalMaxScore, totalScore);
+            updateScoreDisplay(categoryScores, totalPercentage);
             updateScoreVisualization(totalPercentage);
             updateImprovementAnalysis(totalPercentage, categoryScores);
         }
@@ -2404,6 +2199,7 @@
         function calculateCategoryScore(questionNames) {
             let score = 0;
             questionNames.forEach(questionName => {
+                // On utilise les noms de la version desktop ('q1', 'q2'...) qui sont synchronisés par le script
                 const selectedRadio = document.querySelector(`input[name="${questionName}"]:checked`);
                 if (selectedRadio) score += parseInt(selectedRadio.value);
             });
@@ -2420,7 +2216,7 @@
             improvementValue.textContent = (100 - totalPercentage) + '%';
         }
 
-        function updateScoreDisplay(categoryScores, totalPercentage, maxScore, currentScore) {
+        function updateScoreDisplay(categoryScores, totalPercentage) {
             const container = document.getElementById('score-container');
             container.innerHTML = '';
             
@@ -2439,8 +2235,7 @@
             });
             
             const globalLevelInfo = getLevelInfo(totalPercentage);
-            // Afficher le score sur le max dynamique (90 ou 110)
-            document.getElementById('score-total').textContent = `${totalPercentage}% (${currentScore}/${maxScore})`;
+            document.getElementById('score-total').textContent = totalPercentage + '%';
             document.getElementById('global-level-message').textContent = globalLevelInfo.message;
             document.getElementById('global-level-message').className = 'score-percentage ' + globalLevelInfo.level;
         }
@@ -2451,17 +2246,13 @@
             const improvementMargin = 100 - totalPercentage;
             
             let analysisText = '';
-            
-            // On prend les 2 pires catégories (qui sont au début du tableau car trié ascendant)
-            const topOpportunities = categoryScores.slice(0, 2).map(cat => `<strong>${cat.name}</strong>`).join(' et ');
-
             if (totalPercentage >= 70) {
                 analysisText = `
                     <h4>Analyse de vos résultats</h4>
                     <div class="improvement-text">
                         <strong>Votre niveau de bien-être est excellent !</strong> 
                         Avec un score de ${totalPercentage}%, vous avez atteint un équilibre remarquable. 
-                        Les domaines ${topOpportunities} 
+                        Les domaines ${categoryScores.slice(0, 2).map(cat => `<strong>${cat.name}</strong>`).join(' et ')} 
                         représentent vos plus belles opportunités d'évolution.
                     </div>
                 `;
@@ -2471,7 +2262,7 @@
                     <div class="improvement-text">
                         <strong>Vous avez une base solide avec de belles perspectives d'évolution.</strong> 
                         Votre score de ${totalPercentage}% montre un bon équilibre général. 
-                        Les domaines ${topOpportunities} 
+                        Les domaines ${categoryScores.slice(0, 2).map(cat => `<strong>${cat.name}</strong>`).join(' et ')} 
                         offrent les plus belles opportunités.
                     </div>
                 `;
@@ -2481,7 +2272,7 @@
                     <div class="improvement-text">
                         <strong>Votre parcours bien-être commence ici avec un potentiel exceptionnel !</strong> 
                         Votre score de ${totalPercentage}% révèle des opportunités majeures d'amélioration. 
-                        Les domaines ${topOpportunities} 
+                        Les domaines ${categoryScores.slice(0, 2).map(cat => `<strong>${cat.name}</strong>`).join(' et ')} 
                         sont vos meilleurs leviers.
                     </div>
                 `;
@@ -2498,21 +2289,11 @@
             highlightContainer.innerHTML = highlightText;
         }
 
+        // CORRECTION POUR L'IMPRESSION - Masquer les placeholders
         function prepareForPrint() {
-            // Nettoyer les placeholders
             document.querySelectorAll('textarea, input[type="text"]').forEach(element => {
                 element.setAttribute('data-original-placeholder', element.placeholder);
-                element.placeholder = ''; 
-            });
-
-            // CORRECTION CRITIQUE : Forcer l'état 'checked' dans le DOM pour l'impression
-            // Cela s'assure que le navigateur "voit" les cases cochées
-            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
-                if (input.checked) {
-                    input.setAttribute('checked', 'checked');
-                } else {
-                    input.removeAttribute('checked');
-                }
+                element.placeholder = ''; // Vider le placeholder avant impression
             });
         }
 
@@ -2531,6 +2312,7 @@
             setTimeout(restoreAfterPrint, 1000);
         }
 
+        // Gérer aussi l'impression directe du navigateur
         window.addEventListener('beforeprint', prepareForPrint);
         window.addEventListener('afterprint', restoreAfterPrint);
     </script>
