@@ -559,7 +559,7 @@
             display: none;
         }
 
-        /* STYLES POUR L'IMPRESSION PDF - CORRIGÉS */
+        /* STYLES POUR L'IMPRESSION PDF - MODIFIÉS POUR MOBILE */
         @media print {
             body {
                 padding: 8px;
@@ -568,17 +568,16 @@
             .header {
                 background: #2c3e50 !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .section {
                 border: 1px solid #ccc;
                 box-shadow: none;
             }
-            .compact-option input {
-                -webkit-print-color-adjust: exact;
-            }
             .results-section {
                 background-color: white !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .download-section {
                 display: none;
@@ -586,18 +585,22 @@
             .improvement-analysis {
                 background-color: #f0f8ff !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .highlight {
                 background-color: #fffacd !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .notes-section {
                 background-color: #f9f9f9 !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .score-bar-fill {
                 background: #2c3e50 !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .mobile-question {
                 display: none !important;
@@ -608,6 +611,7 @@
             .other-input-fullwidth {
                 background-color: #f8f9fa !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             body::before {
                 opacity: 0.03;
@@ -619,7 +623,7 @@
                 display: none !important;
             }
             
-            /* CORRECTION : MASQUER LES PLACEHOLDERS À L'IMPRESSION */
+            /* Masquer les placeholders */
             textarea::placeholder,
             input::placeholder {
                 color: transparent !important;
@@ -633,22 +637,27 @@
                 background-color: white !important;
             }
             
-            /* CORRECTION CRITIQUE : FORCE L'AFFICHAGE NATIF DES INPUTS À L'IMPRESSION */
-            /* On réinitialise complètement le style pour l'impression pour garantir la visibilité */
+            /* --- CORRECTION MAJEURE MOBILE : FORCE L'AFFICHAGE NATIF DES INPUTS --- */
+            /* On réinitialise complètement le style pour TOUS les inputs pour garantir la visibilité sur mobile */
             input[type="radio"],
-            input[type="checkbox"] {
+            input[type="checkbox"],
+            .compact-option input[type="radio"],
+            .mobile-option input[type="radio"],
+            .radio-option-horizontal input[type="radio"],
+            .checkbox-option input[type="checkbox"] {
                 -webkit-appearance: radio !important;
                 -moz-appearance: radio !important;
                 appearance: radio !important;
                 display: inline-block !important;
-                border: none !important;
+                border: none !important; /* Laisse le navigateur gérer la bordure */
                 background: none !important;
                 box-shadow: none !important;
                 opacity: 1 !important;
                 visibility: visible !important;
                 width: 14px !important;
                 height: 14px !important;
-                margin: 0 4px 0 0 !important; /* marge à droite */
+                margin: 0 4px 0 0 !important;
+                position: static !important; /* Évite les problèmes de positionnement */
             }
 
             input[type="checkbox"] {
@@ -657,11 +666,13 @@
                 appearance: checkbox !important;
             }
             
-            /* On désactive les styles personnalisés (after/before) qui peuvent bugger à l'impression */
+            /* On DÉTRUIT les styles personnalisés (les ronds CSS) qui ne s'affichent pas sur mobile */
             .compact-option input[type="radio"]::after,
             .mobile-option input[type="radio"]::after,
             .radio-option-horizontal input[type="radio"]::after,
-            .checkbox-option input[type="checkbox"]::after {
+            .checkbox-option input[type="checkbox"]::after,
+            input[type="radio"]::before,
+            input[type="radio"]::after {
                 content: none !important;
                 display: none !important;
             }
@@ -675,8 +686,7 @@
                 border-bottom: 1px solid #eee !important;
             }
 
-            /* --- CORRECTIFS SPÉCIFIQUES POUR QUESTIONS 23-30 EN IMPRESSION --- */
-            /* Force l'alignement horizontal et empêche le retour à la ligne désordonné */
+            /* Correctifs alignement questions 23+ */
             .radio-group-horizontal,
             .checkbox-grid {
                 display: flex !important;
@@ -686,14 +696,13 @@
                 width: 100% !important;
             }
 
-            /* Garde l'input et son label collés ensemble sur la même ligne */
             .radio-option-horizontal,
             .checkbox-option {
                 display: inline-flex !important;
                 align-items: center !important;
                 margin-right: 15px !important;
                 margin-bottom: 5px !important;
-                white-space: nowrap !important; /* Empêche le label de se séparer de l'input */
+                white-space: nowrap !important;
                 width: auto !important;
                 break-inside: avoid !important;
             }
@@ -701,12 +710,11 @@
             .radio-option-horizontal label,
             .checkbox-option label {
                 display: inline-block !important;
-                margin-left: 4px !important; /* Espace entre case et texte */
+                margin-left: 4px !important;
                 margin-bottom: 0 !important;
                 vertical-align: middle !important;
             }
 
-            /* Gestion du champ Autre */
             .other-option-container {
                 display: flex !important;
                 align-items: center !important;
